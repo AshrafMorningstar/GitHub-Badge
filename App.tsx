@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { BADGES, GUIDES, FAQS } from './constants';
-import { BadgeType } from './types';
+import { BadgeType, UserStats } from './types';
 import BadgeCard from './components/BadgeCard';
 import AiAssistant from './components/AiAssistant';
+import ProfileSearch from './components/ProfileSearch';
 import { Trophy, HelpCircle, BookOpen, AlertCircle, Info, Menu, X, Github } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'badges' | 'guides' | 'ai' | 'faq'>('badges');
   const [filterType, setFilterType] = useState<BadgeType | 'All'>('All');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
 
   const filteredBadges = filterType === 'All' 
     ? BADGES 
@@ -93,11 +95,13 @@ const App: React.FC = () => {
             <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-green-400 mb-4 pb-2">
               The Complete Guide to GitHub Badges
             </h1>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8">
               Discover, track, and earn every achievement available on GitHub. From the common 
               <span className="text-yellow-400 mx-1">Starstruck</span> to the elusive 
               <span className="text-red-400 mx-1">YOLO</span>.
             </p>
+
+            <ProfileSearch onUserFound={setUserStats} />
           </div>
         )}
 
@@ -123,7 +127,7 @@ const App: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredBadges.map(badge => (
-                <BadgeCard key={badge.id} badge={badge} />
+                <BadgeCard key={badge.id} badge={badge} userStats={userStats} />
               ))}
             </div>
             

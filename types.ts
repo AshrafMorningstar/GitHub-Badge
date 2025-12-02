@@ -26,3 +26,10 @@ export interface AchievementGuide {
   title: string;
   steps: string[];
 }
+
+export interface UserStats {
+  username: string;
+  avatarUrl: string;
+  totalStars: number;
+  mergedPRs: number;
+}
