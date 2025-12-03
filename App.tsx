@@ -154,7 +154,7 @@ const App: React.FC = () => {
   }, [BADGES, filterType, filterCategory, searchQuery, showOwnedOnly, manualOwnedBadges, userStats, sortBy]);
 
   return (
-    <div className="min-h-screen bg-gh-bg dark:bg-gh-bg-dark text-gh-text dark:text-gh-text-dark transition-colors duration-500 relative overflow-hidden bg-grid-pattern selection:bg-blue-500/20">
+    <div className="min-h-screen bg-gh-bg dark:bg-gh-bg-dark text-gh-text dark:text-gh-text-dark transition-colors duration-500 relative overflow-hidden bg-grid-pattern selection:bg-blue-500/20 flex flex-col">
       
       {/* Premium Animated Atmospheric Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
@@ -164,7 +164,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="sticky top-4 z-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="sticky top-4 z-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="glass-panel rounded-2xl shadow-2xl shadow-black/5 border border-white/40 dark:border-white/5 backdrop-blur-xl transition-all duration-300">
           <div className="flex items-center justify-between h-16 px-6">
             <div className="flex items-center gap-3 shrink-0 group" onClick={() => { setActiveTab('badges'); setSelectedBadge(null); }}>
@@ -254,7 +254,7 @@ const App: React.FC = () => {
         )}
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 min-h-[80vh]">
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 w-full min-h-[80vh]">
         
         {/* Intro Hero */}
         {activeTab === 'badges' && !selectedBadge && (
@@ -485,8 +485,14 @@ const App: React.FC = () => {
              </div>
           </div>
         )}
-
       </main>
+
+      {/* Attribution Footer */}
+      <footer className="w-full py-8 text-center text-slate-500 dark:text-slate-500 text-sm border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-black/20 backdrop-blur-sm z-10">
+        <p className="font-medium">
+          Created by <span className="font-bold text-slate-700 dark:text-slate-300 hover:text-blue-500 transition-colors cursor-default">Ashraf Morningstar</span>
+        </p>
+      </footer>
     </div>
   );
 };

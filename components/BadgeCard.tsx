@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge, BadgeType, UserStats, BadgeRarity } from '../types';
-import { Lock, CheckCircle2, Tag, ChevronRight, Info } from 'lucide-react';
+import { Lock, CheckCircle2, Tag, ChevronRight, Info, Microscope, Loader2 } from 'lucide-react';
 
 interface BadgeCardProps {
   badge: Badge;
@@ -32,6 +32,7 @@ const getRarityGlow = (rarity: BadgeRarity) => {
 }
 
 const BadgeCard: React.FC<BadgeCardProps> = ({ badge, userStats, isManuallyOwned, onClick }) => {
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const isRetired = badge.type === BadgeType.RETIRED;
 
   // Progress Logic
@@ -88,6 +89,16 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge, userStats, isManuallyOwned
   const rarityClass = getRarityStyles(badge.rarity);
   const glowClass = getRarityGlow(badge.rarity);
 
+  const handleAnalyzeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsAnalyzing(true);
+    // Simulate analysis delay before opening details
+    setTimeout(() => {
+        setIsAnalyzing(false);
+        onClick();
+    }, 800);
+  };
+
   return (
     <div 
       id={`badge-card-${badge.id}`}
@@ -132,6 +143,7 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge, userStats, isManuallyOwned
                  <span className={`
                     px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border
                     bg-gradient-to-r ${rarityClass}
+                    ${isUnlocked ? 'animate-pulse scale-110 shadow-[0_0_10px_currentColor] border-current' : ''}
                  `}>
                     {badge.rarity}
                  </span>
@@ -167,28 +179,39 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge, userStats, isManuallyOwned
         </div>
 
         {/* Progress / Status */}
-        <div className="mt-6 pt-4 border-t border-gh-border dark:border-gh-border-dark/50">
-            {progress ? (
-                <div className="space-y-2">
-                    <div className="flex justify-between text-[11px] font-medium">
-                        <span className="text-gh-muted dark:text-slate-500">Progress</span>
-                        <span className="text-gh-text dark:text-white font-mono">{progress.label}</span>
+        <div className="mt-6 pt-4 border-t border-gh-border dark:border-gh-border-dark/50 flex items-center justify-between gap-4">
+            <div className="flex-1">
+                {progress ? (
+                    <div className="space-y-2">
+                        <div className="flex justify-between text-[11px] font-medium">
+                            <span className="text-gh-muted dark:text-slate-500">Progress</span>
+                            <span className="text-gh-text dark:text-white font-mono">{progress.label}</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div 
+                                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                                style={{ width: `${percent}%` }}
+                            />
+                        </div>
                     </div>
-                    <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                        <div 
-                            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-                            style={{ width: `${percent}%` }}
-                        />
+                ) : (
+                    <div className="flex items-center justify-between text-xs text-gh-muted dark:text-slate-500">
+                        <span>Status</span>
+                        <span className={`font-medium ${isUnlocked ? 'text-emerald-500' : 'text-slate-400'}`}>
+                            {isUnlocked ? 'Completed' : 'Not Started'}
+                        </span>
                     </div>
-                </div>
-            ) : (
-                <div className="flex items-center justify-between text-xs text-gh-muted dark:text-slate-500">
-                    <span>Status</span>
-                    <span className={`font-medium ${isUnlocked ? 'text-emerald-500' : 'text-slate-400'}`}>
-                        {isUnlocked ? 'Completed' : 'Not Started'}
-                    </span>
-                </div>
-            )}
+                )}
+            </div>
+            
+            <button
+                onClick={handleAnalyzeClick}
+                disabled={isAnalyzing}
+                className="shrink-0 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                title="Analyze Strategy"
+            >
+                {isAnalyzing ? <Loader2 size={16} className="animate-spin" /> : <Microscope size={16} />}
+            </button>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge, BadgeType, UserStats, BadgeRarity } from '../types';
-import { ArrowLeft, CheckCircle2, Lock, Star, Trophy, AlertTriangle, Tag } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Lock, Star, Trophy, AlertTriangle, Tag, Copy, Check } from 'lucide-react';
 
 interface BadgeDetailViewProps {
   badge: Badge;
@@ -30,6 +30,8 @@ const BadgeDetailView: React.FC<BadgeDetailViewProps> = ({
   onBack,
   relatedBadges = []
 }) => {
+  const [copiedId, setCopiedId] = useState(false);
+
   // Determine if unlocked via API stats
   let isApiUnlocked = false;
   let progressLabel = '';
@@ -50,6 +52,12 @@ const BadgeDetailView: React.FC<BadgeDetailViewProps> = ({
   }
 
   const isOwned = isApiUnlocked || isManuallyOwned;
+
+  const handleCopyId = () => {
+    navigator.clipboard.writeText(badge.id);
+    setCopiedId(true);
+    setTimeout(() => setCopiedId(false), 2000);
+  };
 
   return (
     <div className="max-w-6xl mx-auto animate-scale-in pb-10">
@@ -141,32 +149,55 @@ const BadgeDetailView: React.FC<BadgeDetailViewProps> = ({
 
             {badge.tiers && (
               <section>
-                <h3 className="text-lg font-bold text-gh-text dark:text-white mb-5 flex items-center gap-2 uppercase tracking-wider">
-                  <Star className="text-purple-500" size={20} />
-                  Tier Breakdown
-                </h3>
-                <div className="overflow-hidden rounded-2xl border border-gh-border dark:border-gh-border-dark shadow-sm bg-white dark:bg-[#161b22]">
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-gh-subtle dark:bg-[#0d1117] border-b border-gh-border dark:border-gh-border-dark">
-                      <tr>
-                        <th className="px-6 py-4 font-bold text-gh-muted dark:text-slate-400 uppercase tracking-wider text-xs">Level</th>
-                        <th className="px-6 py-4 font-bold text-gh-muted dark:text-slate-400 uppercase tracking-wider text-xs">Requirement</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gh-border dark:divide-gh-border-dark">
-                      {badge.tiers.map((tierStr, idx) => {
-                        const match = tierStr.match(/^(.+?)\s\((.+?)\)$/);
-                        const name = match ? match[1] : tierStr;
-                        const value = match ? match[2] : '';
-                        return (
-                          <tr key={idx} className="group hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors">
-                            <td className="px-6 py-5 font-bold text-gh-text dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{name}</td>
-                            <td className="px-6 py-5 text-gh-muted dark:text-slate-400 font-mono bg-gh-subtle/30 dark:bg-white/5 group-hover:bg-blue-100/30 dark:group-hover:bg-blue-900/20 transition-colors">{value}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                <div className="flex items-center justify-between mb-5">
+                    <h3 className="text-lg font-bold text-gh-text dark:text-white flex items-center gap-2 uppercase tracking-wider">
+                    <Star className="text-purple-500" size={20} />
+                    Tier Breakdown
+                    </h3>
+                    
+                    {isOwned && (
+                        <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full border border-emerald-100 dark:border-emerald-800">
+                            Status: {isApiUnlocked ? 'Progressing' : 'Completed'}
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {badge.tiers.map((tierStr, idx) => {
+                    const match = tierStr.match(/^(.+?)\s\((.+?)\)$/);
+                    const name = match ? match[1] : tierStr;
+                    const value = match ? match[2] : '';
+                    
+                    // Simple logic to guess if this specific tier is met based on 'isOwned'
+                    // For a real app, we'd need granular tier thresholds in the data model.
+                    // For now, if the badge is owned, we fill the bars green to show completion/engagement.
+                    const isTierMet = isOwned; 
+                    
+                    return (
+                      <div key={idx} className="group relative p-4 rounded-xl border border-gh-border dark:border-gh-border-dark bg-white dark:bg-[#161b22] hover:border-blue-500/30 transition-all shadow-sm">
+                        <div className="flex items-center justify-between mb-2 z-10 relative">
+                            <div className="flex items-center gap-3">
+                                <div className={`p-1.5 rounded-lg ${isTierMet ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+                                    <Star size={14} fill={isTierMet ? "currentColor" : "none"} />
+                                </div>
+                                <span className={`font-bold ${isTierMet ? 'text-gh-text dark:text-white' : 'text-gh-muted dark:text-slate-500'}`}>
+                                    {name}
+                                </span>
+                            </div>
+                            <span className="font-mono text-xs font-bold text-gh-muted dark:text-slate-400 bg-gh-subtle dark:bg-black/20 px-2 py-1 rounded">
+                                {value}
+                            </span>
+                        </div>
+                        
+                        {/* Progress Bar within Card */}
+                        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div 
+                                className={`h-full rounded-full transition-all duration-1000 ${isTierMet ? 'bg-emerald-500 w-full' : 'bg-transparent w-0'}`}
+                            />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </section>
             )}
@@ -195,8 +226,8 @@ const BadgeDetailView: React.FC<BadgeDetailViewProps> = ({
           </div>
 
           {/* Sidebar / Actions */}
-          <div className="p-8 md:p-12 bg-white/50 dark:bg-[#161b22]/50 backdrop-blur-sm">
-            <div className="sticky top-24 space-y-8">
+          <div className="p-8 md:p-12 bg-white/50 dark:bg-[#161b22]/50 backdrop-blur-sm flex flex-col justify-between">
+            <div className="space-y-8 sticky top-24">
               
               {userStats && (badge.id === 'starstruck' || badge.id === 'pull-shark') && (
                  <div className="p-6 bg-white dark:bg-[#0d1117] rounded-2xl border border-gh-border dark:border-gh-border-dark shadow-lg">
@@ -267,7 +298,19 @@ const BadgeDetailView: React.FC<BadgeDetailViewProps> = ({
                     Manual claims are saved locally to your browser and do not modify your actual GitHub profile.
                  </p>
               </div>
+            </div>
 
+            {/* Footer Actions */}
+            <div className="mt-8 pt-8 border-t border-gh-border dark:border-gh-border-dark flex items-center justify-between text-xs text-gh-muted dark:text-slate-500">
+               <span>ID: <span className="font-mono">{badge.id}</span></span>
+               <button 
+                onClick={handleCopyId}
+                className="flex items-center gap-1.5 hover:text-blue-500 transition-colors"
+                title="Copy ID"
+               >
+                   {copiedId ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                   {copiedId ? 'Copied' : 'Copy'}
+               </button>
             </div>
           </div>
         </div>
