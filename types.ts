@@ -4,6 +4,10 @@ export enum BadgeType {
   RETIRED = 'Retired'
 }
 
+export type BadgeRarity = 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Legendary';
+
+export type BadgeCategory = 'Contribution' | 'Collaboration' | 'Community' | 'Special';
+
 export interface Badge {
   id: string;
   icon: string;
@@ -11,6 +15,8 @@ export interface Badge {
   description: string;
   howToEarn: string;
   type: BadgeType;
+  rarity: BadgeRarity;
+  category: BadgeCategory;
   tiers?: string[];
   tips?: string[];
 }
@@ -33,3 +39,5 @@ export interface UserStats {
   totalStars: number;
   mergedPRs: number;
 }
+
+export type SortOption = 'name' | 'type' | 'rarity' | 'category';

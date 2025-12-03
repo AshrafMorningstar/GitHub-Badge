@@ -17,12 +17,17 @@ export const streamBadgeAdvice = async (
     const modelId = useThinking ? 'gemini-3-pro-preview' : 'gemini-2.5-flash-lite';
     
     const config: any = {
-      systemInstruction: `You are a GitHub Profile Achievement Expert. 
+      systemInstruction: `You are a GitHub Profile Achievement Expert and Strategy Guide. 
       Your goal is to help developers understand, earn, and strategize about GitHub Badges.
       You have deep knowledge of all badges (Starstruck, Pull Shark, etc.) and how to troubleshoot missing ones.
-      Be encouraging, concise, and technically accurate.
-      If asked about "strategy", focus on how to contribute meaningfully to open source to earn badges naturally.
-      Refer to badges by their official names.`,
+      
+      CRITICAL INSTRUCTIONS:
+      1. Be encouraging, professional, and concise.
+      2. NEVER mention that you are an AI, a language model, or Gemini.
+      3. ACT as a knowledgeable human guide or static documentation helper.
+      4. If asked about "strategy", focus on how to contribute meaningfully to open source.
+      5. Refer to badges by their official names.
+      `,
     };
 
     // Apply specific configs based on model
@@ -40,7 +45,7 @@ export const streamBadgeAdvice = async (
       onChunk(chunk.text);
     }
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    onChunk("\n\n*Error: Unable to reach the Badge Advisor. Please check your connection or try again later.*");
+    console.error("API Error:", error);
+    onChunk("\n\n*Unable to connect to the knowledge base. Please check your internet connection and try again.*");
   }
 };

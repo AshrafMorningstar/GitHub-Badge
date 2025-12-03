@@ -9,6 +9,8 @@ export const BADGES: Badge[] = [
     description: 'Create a repository that captures the community\'s attention.',
     howToEarn: 'Have a repository that receives stars.',
     type: BadgeType.EARNABLE,
+    rarity: 'Common',
+    category: 'Community',
     tiers: ['Base (16)', 'Bronze (128)', 'Silver (512)', 'Gold (4096)'],
     tips: ['Share your projects on social media.', 'Write a great README.', 'Solve a real problem.']
   },
@@ -19,6 +21,8 @@ export const BADGES: Badge[] = [
     description: 'Fastest fingers in the west.',
     howToEarn: 'Close an issue or PR within 5 minutes of opening it.',
     type: BadgeType.EARNABLE,
+    rarity: 'Rare',
+    category: 'Contribution',
     tiers: ['One-time achievement'],
     tips: ['Open an issue on your own repo and close it immediately.', 'Be ready with a fix before opening a PR.']
   },
@@ -29,6 +33,8 @@ export const BADGES: Badge[] = [
     description: 'Collaboration is key.',
     howToEarn: 'Co-author a commit in a pull request that gets merged.',
     type: BadgeType.EARNABLE,
+    rarity: 'Uncommon',
+    category: 'Collaboration',
     tiers: ['Base (10)', 'Bronze (24)', 'Silver (48)', 'Gold (??)'],
     tips: ['Use "Co-authored-by:" in your commit messages.']
   },
@@ -39,6 +45,8 @@ export const BADGES: Badge[] = [
     description: 'The backbone of open source.',
     howToEarn: 'Have pull requests merged into repositories.',
     type: BadgeType.EARNABLE,
+    rarity: 'Common',
+    category: 'Contribution',
     tiers: ['Base (2)', 'Bronze (16)', 'Silver (128)', 'Gold (1024)'],
     tips: ['Contribute to open source.', 'Fix typos in documentation.', 'Small bug fixes count!']
   },
@@ -49,6 +57,8 @@ export const BADGES: Badge[] = [
     description: 'Sharing wisdom.',
     howToEarn: 'Have your answer accepted in a GitHub Discussion.',
     type: BadgeType.EARNABLE,
+    rarity: 'Uncommon',
+    category: 'Community',
     tiers: ['Base (2)', 'Bronze (8)', 'Silver (16)', 'Gold (32)'],
     tips: ['Look for "Unanswered" discussions.', 'Provide clear, code-backed answers.']
   },
@@ -59,6 +69,8 @@ export const BADGES: Badge[] = [
     description: 'Living dangerously.',
     howToEarn: 'Merge a pull request without code review.',
     type: BadgeType.EARNABLE,
+    rarity: 'Epic',
+    category: 'Special',
     tiers: ['One-time achievement'],
     tips: ['Enable "Allow merging without review" in settings.', 'Merge your own PR immediately.']
   },
@@ -69,6 +81,8 @@ export const BADGES: Badge[] = [
     description: 'Supporting the ecosystem.',
     howToEarn: 'Sponsor an open source project via GitHub Sponsors.',
     type: BadgeType.EARNABLE,
+    rarity: 'Common',
+    category: 'Community',
     tiers: ['One-time achievement']
   },
 
@@ -79,7 +93,9 @@ export const BADGES: Badge[] = [
     name: 'GitHub Pro',
     description: 'Professional status.',
     howToEarn: 'Subscribe to GitHub Pro.',
-    type: BadgeType.HIGHLIGHT
+    type: BadgeType.HIGHLIGHT,
+    rarity: 'Common',
+    category: 'Special'
   },
   {
     id: 'dev-program',
@@ -87,7 +103,9 @@ export const BADGES: Badge[] = [
     name: 'Developer Program Member',
     description: 'Building the future.',
     howToEarn: 'Register for the GitHub Developer Program.',
-    type: BadgeType.HIGHLIGHT
+    type: BadgeType.HIGHLIGHT,
+    rarity: 'Uncommon',
+    category: 'Community'
   },
   {
     id: 'security-bounty',
@@ -95,7 +113,9 @@ export const BADGES: Badge[] = [
     name: 'Security Bug Bounty Hunter',
     description: 'Keeping GitHub safe.',
     howToEarn: 'Report a valid security vulnerability to GitHub.',
-    type: BadgeType.HIGHLIGHT
+    type: BadgeType.HIGHLIGHT,
+    rarity: 'Legendary',
+    category: 'Contribution'
   },
 
   // Retired
@@ -105,7 +125,9 @@ export const BADGES: Badge[] = [
     name: 'Arctic Code Vault Contributor',
     description: 'Preserved for eternity.',
     howToEarn: 'Contributed code to a repository included in the 2020 Snapshot.',
-    type: BadgeType.RETIRED
+    type: BadgeType.RETIRED,
+    rarity: 'Epic',
+    category: 'Special'
   },
   {
     id: 'mars-2020',
@@ -113,7 +135,9 @@ export const BADGES: Badge[] = [
     name: 'Mars 2020 Helicopter Contributor',
     description: 'Code on another planet.',
     howToEarn: 'Contributed to a library used by Ingenuity.',
-    type: BadgeType.RETIRED
+    type: BadgeType.RETIRED,
+    rarity: 'Legendary',
+    category: 'Special'
   }
 ];
 
